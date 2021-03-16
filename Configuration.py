@@ -1,18 +1,13 @@
 import torch
-import random
 import torch.nn as nn
-manualSeed = random.randint(1, 10000) # use if you want new results
-print("Random Seed: ", manualSeed)
-random.seed(manualSeed)
-torch.manual_seed(manualSeed)
 # Root directory for dataset
-dataroot = "./data/celeba/"
+dataroot = "./data/art/"
 
 # Number of workers for dataloader
-workers = 4
+workers = 0
 
 # Batch size during training
-batch_size = 128
+batch_size = 64
 
 # Spatial size of training images. All images will be resized to this
 #   size using a transformer.
@@ -31,7 +26,7 @@ ngf = 64
 ndf = 64
 
 # Number of training epochs
-num_epochs = 1000
+num_epochs = 201
 
 # Learning rate for optimizers
 lr = 0.0002
