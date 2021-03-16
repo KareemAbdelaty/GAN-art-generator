@@ -6,7 +6,7 @@ print("Random Seed: ", manualSeed)
 random.seed(manualSeed)
 torch.manual_seed(manualSeed)
 # Root directory for dataset
-dataroot = "./data/celeba/"
+dataroot = "./data/"
 
 # Number of workers for dataloader
 workers = 4

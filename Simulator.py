@@ -206,3 +206,8 @@ if __name__ == "__main__":
     plt.title("Fake Images")
     plt.imshow(np.transpose(img_list[-1],(1,2,0)))
     plt.show()
+    
+    
+    # Save
+    PATH = "model.pt"
+    torch.save(net, PATH)
