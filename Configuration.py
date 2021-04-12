@@ -3,6 +3,8 @@ import torch.nn as nn
 # Root directory for dataset
 
 dataroot = "./data/art"
+datarootmodel = "./models/art/art"
+
 
 # Distance between two models being saved
 save_dist = 100

@@ -90,8 +90,8 @@ class Trainer:
 
         # Apply the weights_init function to randomly initialize all weights
         #  to mean=0, stdev=0.2.
-        netG.apply(weights_init)
-
+        #netG.apply(weights_init)
+        netG.load_state_dict(torch.load("models/art/art100.model")["generator_state_dict"])
         # Print the model
         print(netG)
 
@@ -105,7 +105,8 @@ class Trainer:
 
         # Apply the weights_init function to randomly initialize all weights
         #  to mean=0, stdev=0.2.
-        netD.apply(weights_init)
+        #netD.apply(weights_init)
+        netD.load_state_dict(torch.load(datarootmodel+"100.model")["discrimantor_state_dict"])
 
         # Print the model
         print(netD)
