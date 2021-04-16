@@ -1,13 +1,13 @@
 import torch
 import torch.nn as nn
 # Root directory for dataset
-dataroot = "./data/art/"
+dataroot = "./data/celeba/"
 
 # Number of workers for dataloader
 workers = 0
 
 # Batch size during training
-batch_size = 64
+batch_size = 128
 
 # Spatial size of training images. All images will be resized to this
 #   size using a transformer.

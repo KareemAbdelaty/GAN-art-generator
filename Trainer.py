@@ -79,7 +79,7 @@ class Trainer:
         plt.imshow(np.transpose(vutils.make_grid(real_batch[0].to(device)[:64], padding=2, normalize=True).cpu(),(1,2,0)))
                 
         # Generator Code
-
+        firstModel = torch.load("models/celeba/celeba14.model")
         print("generator setup")
         # Create the generator
         netG = Generator(ngpu).to(device)
@@ -91,14 +91,15 @@ class Trainer:
         # Apply the weights_init function to randomly initialize all weights
         #  to mean=0, stdev=0.2.
         netG.apply(weights_init)
-
+        netG.load_state_dict(firstModel["generator_state_dict"])
+        netG.train()
         # Print the model
         print(netG)
 
         # Create the Discriminator
         print("Discrimantor setup")
         netD = Discriminator(ngpu).to(device)
-
+        netD.train()
         # Handle multi-gpu if desired
         if (device.type == 'cuda') and (ngpu > 1):
             netD = nn.DataParallel(netD, list(range(ngpu)))
@@ -106,7 +107,7 @@ class Trainer:
         # Apply the weights_init function to randomly initialize all weights
         #  to mean=0, stdev=0.2.
         netD.apply(weights_init)
-
+        netD.load_state_dict(firstModel["discrimantor_state_dict"])
         # Print the model
         print(netD)
 
@@ -124,7 +125,8 @@ class Trainer:
         # Setup Adam optimizers for both G and D
         optimizerD = optim.Adam(netD.parameters(), lr=lr, betas=(beta1, 0.999))
         optimizerG = optim.Adam(netG.parameters(), lr=lr, betas=(beta1, 0.999))
-
+        optimizerD.load_state_dict(firstModel["DISoptimizer_state_dict"])
+        optimizerG.load_state_dict(firstModel["GENoptimizer_state_dict"])
 
 
         # Lists to keep track of progress
@@ -136,7 +138,7 @@ class Trainer:
         print("Starting Training Loop...")
         # For each epoch
         progress = {}
-        for epoch in range(num_epochs):
+        for epoch in range(14,num_epochs):
             print("Epoch "+ str(epoch))
             # For each batch in the dataloader
             thisEpoch = {}
