@@ -16,8 +16,8 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from IPython.display import HTML
 from Configuration import *
-from Generator import *
-from Discriminator import *
+from GeneratorT import *
+from DiscriminatorT import *
 
 class TrainerT:
     def showImages(path):
@@ -27,7 +27,7 @@ class TrainerT:
         firstModel = torch.load(".art0.model")
         print(firstModel["generator_state_dict"])
         print("______________________________________________________________")
-        netG = Generator(ngpu).to(device)
+        netG = GeneratorT(ngpu).to(device)
         netG.load_state_dict(firstModel["generator_state_dict"])
         netG.eval()
         fake1 = netG(fixed_noise).detach().cpu()
@@ -82,7 +82,7 @@ class TrainerT:
         firstModel = torch.load("models/celeba/celeba14.model")
         print("generator setup")
         # Create the generator
-        netG = Generator(ngpu).to(device)
+        netG = GeneratorT(ngpu).to(device)
 
         # Handle multi-gpu if desired
         if (device.type == 'cuda') and (ngpu > 1):
@@ -98,7 +98,7 @@ class TrainerT:
 
         # Create the Discriminator
         print("Discrimantor setup")
-        netD = Discriminator(ngpu).to(device)
+        netD = DiscriminatorT(ngpu).to(device)
         netD.train()
         # Handle multi-gpu if desired
         if (device.type == 'cuda') and (ngpu > 1):
@@ -213,7 +213,7 @@ class TrainerT:
             'DISoptimizer_state_dict': optimizerD.state_dict(),    
             }
             #progress[str(epoch)] =  thisEpoch
-            name = "models/celeba/" + dr.split("/")[2] + str(epoch) + ".model"
+            name = "models/celebaT/" + dr.split("/")[2] + str(epoch) + ".model"
             #torch.save(progress,name)
             torch.save(thisEpoch,name)
         plt.figure(figsize=(10,5))
