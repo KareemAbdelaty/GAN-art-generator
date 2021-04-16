@@ -62,7 +62,7 @@ class MainMenu(Frame):
                 )
         self.R3 = Radiobutton(self, text="Van Goch", variable=self.dataset, value=3,
                 )
-        self.epoch = Scale(self,length=1060,bg ="cyan",orient=HORIZONTAL,from_ = 0, to = 9,variable = self.num)
+        self.epoch = Scale(self,length=1060,bg ="cyan",orient=HORIZONTAL,from_ = 0, to = 14,variable = self.num)
         self.vectorz = Button(self,width = 1060, text = "New Random Vector" ,bg = "cyan",command =lambda: self.update_vector())
         self.generateNew = Button(self,width = 1060 ,text = "Generate new" ,bg = "cyan",command =lambda: self.generateNewImage())
         self.imageMatrix = Label(self)
