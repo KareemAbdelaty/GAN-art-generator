@@ -90,7 +90,7 @@ class MainMenu(Frame):
             self.imageMatrix.image = self.img
             self.imageMatrix.pack()
         elif(self.dataset.get() == 2):
-            path = "models/landscapes/lanscape"+str(self.num.get()*100)+".model"
+            path = "models/scenery/scenery"+str(self.num.get()*100)+".model"
             firstModel = torch.load(path)
             netG = Generator(ngpu).to(self.device)
             netG.load_state_dict(firstModel["generator_state_dict"])
