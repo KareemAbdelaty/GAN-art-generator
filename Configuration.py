@@ -4,7 +4,7 @@ import torch.nn as nn
 
 dataroot = "./data/scenery"
 datarootmodel = "./models/scenery/scenery"
-resume = "90"
+resume = "500"
 
 # Distance between two models being saved
 save_dist = 100
