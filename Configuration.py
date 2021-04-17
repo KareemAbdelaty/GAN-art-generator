@@ -1,7 +1,14 @@
 import torch
 import torch.nn as nn
 # Root directory for dataset
-dataroot = "./data/celeba/"
+
+dataroot = "./data/scenery"
+datarootmodel = "./models/scenery/scenery"
+resume = "90"
+
+# Distance between two models being saved
+save_dist = 100
+
 
 # Number of workers for dataloader
 workers = 0
@@ -26,10 +33,10 @@ ngf = 64
 ndf = 64
 
 # Number of training epochs
-num_epochs = 201
+num_epochs = 1000
 
 # Learning rate for optimizers
-lr = 0.0002
+lr = 0.00005
 
 # Beta1 hyperparam for Adam optimizers
 beta1 = 0.5

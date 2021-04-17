@@ -90,9 +90,8 @@ class Trainer:
 
         # Apply the weights_init function to randomly initialize all weights
         #  to mean=0, stdev=0.2.
-        netG.apply(weights_init)
-        netG.load_state_dict(firstModel["generator_state_dict"])
-        netG.train()
+        #netG.apply(weights_init)
+        netG.load_state_dict(torch.load(datarootmodel+resume+".model")["generator_state_dict"])
         # Print the model
         print(netG)
 
@@ -106,8 +105,8 @@ class Trainer:
 
         # Apply the weights_init function to randomly initialize all weights
         #  to mean=0, stdev=0.2.
-        netD.apply(weights_init)
-        netD.load_state_dict(firstModel["discrimantor_state_dict"])
+        #netD.apply(weights_init)
+        netD.load_state_dict(torch.load(datarootmodel+resume+".model")["discrimantor_state_dict"])
         # Print the model
         print(netD)
 
@@ -122,11 +121,11 @@ class Trainer:
         real_label = 1.
         fake_label = 0.
 
-        # Setup Adam optimizers for both G and D
-        optimizerD = optim.Adam(netD.parameters(), lr=lr, betas=(beta1, 0.999))
-        optimizerG = optim.Adam(netG.parameters(), lr=lr, betas=(beta1, 0.999))
-        optimizerD.load_state_dict(firstModel["DISoptimizer_state_dict"])
-        optimizerG.load_state_dict(firstModel["GENoptimizer_state_dict"])
+
+        # Setup optimizers for both G and D
+        optimizerD = optim.RMSprop(netD.parameters(), lr=lr)
+        optimizerG = optim.RMSprop(netG.parameters(), lr=lr)
+
 
 
         # Lists to keep track of progress
@@ -155,9 +154,9 @@ class Trainer:
                 # Forward pass real batch through D
                 output = netD(real_cpu).view(-1)
                 # Calculate loss on all-real batch
-                errD_real = criterion(output, label)
+                #errD_real = criterion(output, label)
+                errD_real = output.mean()
                 # Calculate gradients for D in backward pass
-                errD_real.backward()
                 D_x = output.mean().item()
                 ## Train with all-fake batch
                 # Generate batch of latent vectors
@@ -168,14 +167,18 @@ class Trainer:
                 # Classify all fake batch with D
                 output = netD(fake.detach()).view(-1)
                 # Calculate D's loss on the all-fake batch
-                errD_fake = criterion(output, label)
+                #errD_fake = criterion(output, label)
+                errD_fake = output.mean()
                 # Calculate the gradients for this batch
-                errD_fake.backward()
                 D_G_z1 = output.mean().item()
                 # Add the gradients from the all-real and all-fake batches
-                errD = errD_real + errD_fake
+                errD = -errD_real + errD_fake
+                errD.backward()
                 # Update D
                 optimizerD.step()
+                
+                for p in netD.parameters():
+                    p.data.clamp_(-0.1, 0.1)
                 ############################
                 # (2) Update G network: maximize log(D(G(z)))
                 ###########################
@@ -184,7 +187,8 @@ class Trainer:
                 # Since we just updated D, perform another forward pass of all-fake batch through D
                 output = netD(fake).view(-1)
                 # Calculate G's loss based on this output
-                errG = criterion(output, label)
+                #errG = criterion(output, label)
+                errG = -output.mean()
                 # Calculate gradients for G
                 errG.backward()
                 D_G_z2 = output.mean().item()
@@ -213,9 +217,10 @@ class Trainer:
             'DISoptimizer_state_dict': optimizerD.state_dict(),    
             }
             #progress[str(epoch)] =  thisEpoch
-            name = "models/celeba/" + dr.split("/")[2] + str(epoch) + ".model"
+            name = "models/" + dr.split("/")[2] + str(epoch) + ".model"
             #torch.save(progress,name)
-            torch.save(thisEpoch,name)
+            if (epoch % save_dist == 0):
+                torch.save(thisEpoch,name)
         plt.figure(figsize=(10,5))
         plt.title("Generator and Discriminator Loss During Training")
         plt.plot(G_losses,label="G")
@@ -250,8 +255,6 @@ class Trainer:
         
         
         
-
-
 if __name__ == "__main__":
     Trainer.train(dataroot)
 

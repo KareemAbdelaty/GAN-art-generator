@@ -62,7 +62,7 @@ class MainMenu(Frame):
                 )
         self.R3 = Radiobutton(self, text="Van Goch", variable=self.dataset, value=3,
                 )
-        self.epoch = Scale(self,length=1060,bg ="cyan",orient=HORIZONTAL,from_ = 0, to = 200,variable = self.num)
+        self.epoch = Scale(self,length=1060,bg ="cyan",orient=HORIZONTAL,from_ = 0, to = 14,variable = self.num)
         self.vectorz = Button(self,width = 1060, text = "New Random Vector" ,bg = "cyan",command =lambda: self.update_vector())
         self.generateNew = Button(self,width = 1060 ,text = "Generate new" ,bg = "cyan",command =lambda: self.generateNewImage())
         self.imageMatrix = Label(self)
@@ -77,7 +77,7 @@ class MainMenu(Frame):
         self.noise = torch.randn(64, nz, 1, 1, device=self.device)
     def generateNewImage(self):
         if(self.dataset.get() == 1):
-            path = "models/celeba/celeba"+str(self.num.get())+".model"
+            path = "models/faces/celeba"+str(self.num.get()*10)+".model"
             firstModel = torch.load(path)
             netG = Generator(ngpu).to(self.device)
             netG.load_state_dict(firstModel["generator_state_dict"])
@@ -103,7 +103,7 @@ class MainMenu(Frame):
             self.imageMatrix.image = self.img
             self.imageMatrix.pack()
         elif(self.dataset.get()==3):
-            path = "models/art/art"+str(self.num.get())+".model"
+            path = "models/art/art"+str(self.num.get()*100)+".model"
             firstModel = torch.load(path)
             netG = Generator(ngpu).to(self.device)
             netG.load_state_dict(firstModel["generator_state_dict"])
